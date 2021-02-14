@@ -18,14 +18,18 @@ item_name = ["HP Pavilion Gaming Laptop", "HyperX Gaming Headset",
 ran_size = list()
 # create the size of transaction
 trans = list()
+# generate a random number between 1,10 in a size 20 list.
 for i in range(20):
     ran_size.append(random.randint(1, 10))
 print(ran_size)
 
 
-# a function that generates a random number between 0 and 9
+# a function that generates a random number between 0 and 9 to chose from item_name list
 def ran_fun():
     return random.randint(0, 9)
+
+
+# Generate transaction given the number of transaction form the ran_size list of size 20
 for q in ran_size:
     temp = list()
     i = 0
@@ -34,10 +38,13 @@ for q in ran_size:
         temp.append(item_name[ran_fun()])
         i = len(set(temp))
     trans.append(set(temp))
-# print(len(trans))
+
+print(len(trans))
 trans = np.array(trans).reshape(-1, 1)
 print(pd.DataFrame(trans))
 trans = pd.DataFrame(trans)
-trans.to_csv("src/walmart_transaction.csv")
+
+# CONVERTS THE DATAFRAME INTO A CSV FILE
+# trans.to_csv("walmart_transaction.csv")
 df_2 = pd.DataFrame(item_name)
-df_2.to_csv("src/walmart_items.csv")
+# df_2.to_csv("walmart_items.csv")
