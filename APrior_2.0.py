@@ -9,7 +9,7 @@ def a_priori(item_list, transaction):
     # print(df2.head())
     trans = df1["transaction"]
     item_name = np.array(df2["item_name"])
-    counter = np.zeros(10, dtype=int)
+    counter = np.zeros(len(item_name), dtype=int)
     # When K =1
     for row in trans:
         row = row.split(',')
