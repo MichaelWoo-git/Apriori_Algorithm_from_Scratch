@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 import time
-
+from itertools import permutations,combinations
 print("Welcome to Apriori 2.0!")
 store_num = input("Please select your store \n 1. Amazon \n 2. Nike \n 3. Best Buy \n 4. K-Mart \n 5. Walmart\n")
 print(store_num)
@@ -44,7 +44,8 @@ def calculate_support(transaction, counts_of_items, min_support_percent):
     df = pd.DataFrame({"item_name": name_items, "support": support_calculation})
     df_meet_min_support = pd.DataFrame(df.loc[df["support"] >= min_support_percent])
     print(df_meet_min_support)
-
+    # check to see if item is in set
+    return df_meet_min_support
 
 
 def a_priori(item_list, transaction, support_percentage, confidence_percentage):
@@ -73,7 +74,25 @@ def a_priori(item_list, transaction, support_percentage, confidence_percentage):
                     print(counter)
         df3 = pd.DataFrame({"item_name": item_name, "number_of_count": counter})
         print(df3)
-    calculate_support(df1, df3, support_percentage)
+        items_that_meet_support = calculate_support(df1, df3, support_percentage)
+        # check the size of the items that agree with the support
+        # print(len(items_that_meet_support["item_name"]))
+        if len(items_that_meet_support["item_name"]) == 1:
+            print("The most frequent item in the transaction is: " + str(items_that_meet_support.at[0,"item_name"]))
+        items = np.array(items_that_meet_support["item_name"])
+        comb = combinations(items,2)
+        print(list(comb))
+
+        #do these permutations last
+        # perm = permutations(items)
+        # print(list(perm))
+
+
+        # if len(items_that_meet_support["item_name"] > 1):
+        #     break
+
+
+
 
 
 a_priori(str(number_to_item_list_of_store(int(store_num))), str(number_to_store(int(store_num))),
