@@ -34,6 +34,19 @@ def number_to_item_list_of_store(store_number):
     return switcher_dict.get(store_number)
 
 
+def calculate_support(transaction, counts_of_items, min_support_percent):
+    # this will be the denominator
+    transaction_size = len(transaction)
+    # print(type(transaction_size))
+    # print(counts_of_items)
+    name_items = np.array(counts_of_items["item_name"])
+    support_calculation = (counts_of_items["number_of_count"] / transaction_size) * 100
+    df = pd.DataFrame({"item_name": name_items, "support": support_calculation})
+    df_meet_min_support = pd.DataFrame(df.loc[df["support"] >= min_support_percent])
+    print(df_meet_min_support)
+
+
+
 def a_priori(item_list, transaction, support_percentage, confidence_percentage):
     if support_percentage > 100 or confidence_percentage > 100 or support_percentage < 0 or confidence_percentage < 0:
         print("Support Percent or Confidence Percent is Invalid. \n Enter a valid number between 0 and 100.\n")
@@ -60,6 +73,7 @@ def a_priori(item_list, transaction, support_percentage, confidence_percentage):
                     print(counter)
         df3 = pd.DataFrame({"item_name": item_name, "number_of_count": counter})
         print(df3)
+    calculate_support(df1, df3, support_percentage)
 
 
 a_priori(str(number_to_item_list_of_store(int(store_num))), str(number_to_store(int(store_num))),
