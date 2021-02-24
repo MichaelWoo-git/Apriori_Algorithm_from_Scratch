@@ -49,7 +49,8 @@ def calculate_support(transaction, counts_of_items, min_support_percent):
     return df_meet_min_support
 
 
-def a_priori(item_list, transaction, support_percentage, confidence_percentage):
+def a_priori_read(item_list, transaction, support_percentage, confidence_percentage):
+    # Create two different functions one that is solo for read in the file data and the other that is algorithmic with the data
     if support_percentage > 100 or confidence_percentage > 100 or support_percentage < 0 or confidence_percentage < 0:
         print("Support Percent or Confidence Percent is Invalid. \n Enter a valid number between 0 and 100.\n")
         print("Restarting Apriori 2.0.....\n")
@@ -64,24 +65,51 @@ def a_priori(item_list, transaction, support_percentage, confidence_percentage):
         trans = df1["transaction"]
         item_name = np.array(df2["item_name"])
         counter = np.zeros(len(item_name), dtype=int)
-        # When K =1
-        for row in trans:
-            row = row.split(',')
-            # this will be our indexer for our counter
-            i = 0
+        k_val = 1
+        a_priori_do(item_name, trans, support_percentage, confidence_percentage, k_val)
+
+
+def a_priori_do(item_name, trans, support_percentage, confidence_percentage, k_val):
+    counter = np.zeros(len(item_name), dtype=int)
+    # When K =1
+    for row in trans:
+        row = row.split(',')
+        # this will be our indexer for our counter
+        i = 0
+        # K = 1
+        if k_val == 1:
             for item in item_name:
-                # checks to see if each item existing in a transaction
                 if item in row:
                     counter[i] = counter[i] + 1
                 # onto the next item
                 i += 1
-        df3 = pd.DataFrame({"item_name": item_name, "number_of_count": counter})
-        print(df3)
-        items_that_meet_support = calculate_support(df1, df3, support_percentage)
-        if len(items_that_meet_support["item_name"]) == 1:
-            print("The most frequent item in the transaction is: " + str(items_that_meet_support.at[0, "item_name"]))
+        if k_val > 1:
+            for item in item_name:
+                temp_i = set(item)
+                temp_r = set(row)
+                print(temp_r)
+                print(temp_i)
+                print(not(temp_i.isdisjoint(temp_r)))
+
+
+    df3 = pd.DataFrame({"item_name": item_name, "number_of_count": counter})
+    print(df3)
+    print(counter)
+    items_that_meet_support = calculate_support(trans, df3, support_percentage)
+    k_value = 1
+    if len(items_that_meet_support["item_name"]) == 1:
+        print("The most frequent item in the transaction is: " + str(items_that_meet_support.at[0, "item_name"]))
+    if len(items_that_meet_support["item_name"]) > 1:
+        k_val += 1
         items = np.array(items_that_meet_support["item_name"])
-        comb = combinations(items, 2)
-        print(list(comb))
-a_priori(str(number_to_item_list_of_store(int(store_num))), str(number_to_store(int(store_num))),
-         int(support_percent), int(confidence_percent))
+        comb = combinations(items, k_val)
+        comb = list(comb)
+        df_items = pd.DataFrame({"item_name": comb})
+        df_items = list(df_items["item_name"])
+        print(df_items)
+        k_val += 1
+        a_priori_do(df_items, trans, support_percentage, confidence_percentage, k_val)
+
+
+a_priori_read(str(number_to_item_list_of_store(int(store_num))), str(number_to_store(int(store_num))),
+              int(support_percent), int(confidence_percent))
