@@ -63,12 +63,46 @@ def a_priori_read(item_list, transaction, support_percentage, confidence_percent
         print(df1.head())
         print(df2.head())
         trans = np.array(df1["transaction"])
-        item_name = np.array(df2["item_name"])
-        print(trans)
-        print(item_name)
-        counter = np.zeros(len(item_name), dtype=int)
+        items_names = np.array(df2["item_name"])
+        counter = np.zeros(len(items_names), dtype=int)
+        print(counter)
+        for i in trans:
+            i = list((map(str.strip, i.split(','))))
+            s1 = set(i)
+            print(s1)
+            print(s1)
+            nums = 0
+            for x in items_names:
+                s2 = set()
+                s2.add(x)
+                print(i)
+                print(s2)
+                print(s2.issubset(s1))
+                if s2.issubset(s1):
+                    counter[nums] += 1
+                    print(counter)
+                nums += 1
+        print(counter)
+        # result = map(lambda x: x + x, numbers)
+        counter = list(map(lambda x: int((x/20)*100),counter))
+        df3 = pd.DataFrame({"item_name": items_names,"freq":counter})
+        print(df3)
+        rslt_df = df3[df3['freq'] > support_percentage]
+        print(rslt_df)
+        exit(12321)
+        # item_name = np.array(df2["item_name"])
+        # trans = list(map(str.strip,trans))
+        # item_name = list(map(str.strip,item_name))
+        # print(list(map( lambda s: s.replace(",",""), trans )))
+        # exit(12321)
+        # counter = np.zeros(len(item_name), dtype=int)
+        # print(trans)
+        # for i in trans:
+        #     i = i.split(",")
+        #     print(set(i))
         k_val = 1
         # a_priori_do(item_name, trans, support_percentage, confidence_percentage, k_val)
+
 
 #
 # def a_priori_do(item_name, trans, support_percentage, confidence_percentage, k_val):
@@ -102,8 +136,6 @@ def a_priori_read(item_list, transaction, support_percentage, confidence_percent
 #         print(df_items)
 #         k_val += 1
 #         a_priori_do(df_items, trans, support_percentage, confidence_percentage, k_val)
-
-
 
 
 a_priori_read(str(number_to_item_list_of_store(int(store_num))), str(number_to_store(int(store_num))),
