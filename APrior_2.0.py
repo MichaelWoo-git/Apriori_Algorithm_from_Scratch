@@ -62,7 +62,7 @@ def a_priori_read(item_list, transaction, support_percentage, confidence_percent
         df1 = pd.read_csv(transaction)
         print(df1.head())
         print(df2.head())
-        trans = df1["transaction"]
+        trans = np.array(df1["transaction"])
         item_name = np.array(df2["item_name"])
         counter = np.zeros(len(item_name), dtype=int)
         k_val = 1
@@ -87,10 +87,12 @@ def a_priori_do(item_name, trans, support_percentage, confidence_percentage, k_v
             for item in item_name:
                 temp_i = set(item)
                 temp_r = set(row)
-                print(temp_r)
-                print(temp_i)
-                print(not(temp_i.isdisjoint(temp_r)))
-
+                # print(temp_r)
+                # print(temp_i)
+                if temp_i.issubset(temp_r):
+                    counter[i] = counter[i] + 1
+                    print("yeah")
+                i += 1
 
     df3 = pd.DataFrame({"item_name": item_name, "number_of_count": counter})
     print(df3)
