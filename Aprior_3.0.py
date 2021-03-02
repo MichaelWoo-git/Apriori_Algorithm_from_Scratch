@@ -13,6 +13,7 @@ print(support_percent)
 confidence_percent = input("Please enter the percentage of Confidence you want?\n")
 print(confidence_percent)
 
+
 # These are my dictionaries to choose which store to get based in Key-Value Pairs
 def number_to_store(store_number):
     switcher = {
@@ -61,53 +62,44 @@ def ap(items_names, trans, support_percentage, confidence_percentage, k_value):
         for i in trans:
             i = list((map(str.strip, i.split(','))))
             s1 = set(i)
-            # print(s1)
-            # print(s1)
             nums = 0
             for x in items_names:
                 s2 = set()
                 s2.add(x)
-                # print(i)
-                # print(s2)
-                # print(s2.issubset(s1))
                 if s2.issubset(s1):
                     counter[nums] += 1
-                # print(counter)
                 nums += 1
     if k_value > 1:
         for i in trans:
             i = list((map(str.strip, i.split(','))))
             s1 = set(i)
-            # print(s1)
             nums = 0
             for x in items_names:
                 s2 = set()
                 x = np.asarray(x)
-                # print(x)
                 for q in x:
-                    #   print(q)
                     s2.add(q)
-                # print(i)
-                # print(s2)
-                # print(s2.issubset(s1))
                 if s2.issubset(s1):
                     counter[nums] += 1
-                # print(counter)
                 nums += 1
-
-    # print(counter)
     counter = list(map(lambda x: int((x / len(trans)) * 100), counter))
-    df3 = pd.DataFrame({"item_name": items_names, "freq": counter})
-    # print(df3)
-    rslt_df = df3[df3['freq'] > support_percentage]
-
+    df3 = pd.DataFrame({"item_name": items_names, "support": counter})
+    rslt_df = df3[df3['support'] > support_percentage]
+    print("When K = "+ str(k_value))
     print(rslt_df)
     if not rslt_df.empty:
-        print(k_value)
+        #print(k_value)
+        if k_value > 1:
+            df = np.array(rslt_df["item_name"])
+            #print(df)
+            for i_t in df:
+                i_t = np.asarray(i_t)
+                perm = permutations(i_t, k_value)
+                #print(list(perm))
         k_value += 1
         df_items = pd.read_csv(str(number_to_item_list_of_store(int(store_num))))
         names_of_items = np.array(df_items["item_name"])
-       # print(names_of_items)
+        # print(names_of_items)
         item_combs = np.array(df_items["item_name"])
         comb = combinations(item_combs, k_value)
         comb = list(comb)
