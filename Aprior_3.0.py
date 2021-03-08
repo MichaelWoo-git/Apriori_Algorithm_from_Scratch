@@ -121,7 +121,6 @@ items_names, trans, support_percent, confidence_percent, k_value = a_priori_read
     int(support_percent), int(confidence_percent))
 
 items, supp, k_value, df = ap_1(items_names, trans, support_percent, confidence_percent, k_value)
-# frames.append()
 frames.append(df)
 boo = True
 while boo:
@@ -129,65 +128,6 @@ while boo:
     print("here is df")
     print(df_1)
     frames.append(df_1)
-    # results.append(
-    # df_1,ignore_index=True)
     k_value += 1
 print("results are below")
 print(pd.concat(frames))
-
-# print(results)
-# #
-# def ap(items_names, trans, support_percentage, confidence_percentage, k_value):
-#     counter = np.zeros(len(items_names), dtype=int)
-#     # print(counter)
-#     if k_value == 1:
-#         for i in trans:
-#             i = list((map(str.strip, i.split(','))))
-#             s1 = set(i)
-#             nums = 0
-#             for x in items_names:
-#                 s2 = set()
-#                 s2.add(x)
-#                 if s2.issubset(s1):
-#                     counter[nums] += 1
-#                 nums += 1
-#     if k_value > 1:
-#         for i in trans:
-#             i = list((map(str.strip, i.split(','))))
-#             s1 = set(i)
-#             nums = 0
-#             for x in items_names:
-#                 s2 = set()
-#                 x = np.asarray(x)
-#                 for q in x:
-#                     s2.add(q)
-#                 if s2.issubset(s1):
-#                     counter[nums] += 1
-#                 nums += 1
-#     counter = list(map(lambda x: int((x / len(trans)) * 100), counter))
-#     df3 = pd.DataFrame({"item_name": items_names, "support": counter})
-#     rslt_df = df3[df3['support'] > support_percentage]
-#     print("When K = "+ str(k_value))
-#     print(rslt_df)
-#     if not rslt_df.empty:
-#         #print(k_value)
-#         if k_value > 1:
-#             df = np.array(rslt_df["item_name"])
-#             #print(df)
-#             for i_t in df:
-#                 i_t = np.asarray(i_t)
-#                 perm = permutations(i_t, k_value)
-#                 #print(list(perm))
-#         k_value += 1
-#         df_items = pd.read_csv(str(number_to_item_list_of_store(int(store_num))))
-#         names_of_items = np.array(df_items["item_name"])
-#         # print(names_of_items)
-#         item_combs = np.array(df_items["item_name"])
-#         comb = combinations(item_combs, k_value)
-#         comb = list(comb)
-#         # print(len(comb))
-#         # for t in comb:
-#         #     for r in t:
-#         #         print(r)
-#         ### create permutations here
-#         ap(comb, trans, support_percentage, confidence_percentage, k_value)
