@@ -39,6 +39,17 @@ def number_to_item_list_of_store(store_number):
     return switcher_dict.get(store_number)
 
 
+def ns(store_number):
+    switcher_store = {
+        1: "Amazon",
+        2: "Nike",
+        3: "Best Buy",
+        4: "K-Mart",
+        5: "Walmart"
+    }
+    return switcher_store.get(store_number)
+
+
 #  We first have to read in the csv files and make sure that the inputs received from the user are valid
 
 def a_priori_read(item_list, transaction, support_percentage, confidence_percentage):
@@ -47,7 +58,7 @@ def a_priori_read(item_list, transaction, support_percentage, confidence_percent
         print("Support Percent or Confidence Percent is Invalid. \n Enter a valid number between 0 and 100.\n")
         print("Restarting Apriori 2.0.....\n")
         time.sleep(2)
-        os.system("python APrior_2.0.py")
+        os.system("python Aprior_Algo")
     if support_percentage >= 0 and support_percentage <= 100 and confidence_percentage >= 0 and confidence_percentage <= 100:
         df2 = pd.read_csv(item_list)
         df1 = pd.read_csv(transaction)
@@ -199,7 +210,8 @@ def confidence(val):
                     temp_set = []
                     for t in range(0, val):
                         temp_set.append(y[t])
-                    lol = tuple(sorted(temp_set))
+                    # lol = tuple(sorted(temp_set))
+                    lol = tuple(temp_set)
                     tp_lst = list(stuff_name)
                     ss = support_arr[tp_lst.index(lol)]
                     sup_ov.append(ov_sup)
@@ -217,11 +229,7 @@ def confidence(val):
     return df_main
 
 
-# Finding the max k value in the given set
-
-max(df_supp["k_val"])
-
-# Iterative calculating the assocations and confidence
+# Iterative calculating the associations and confidence
 
 df_frames = []
 for lp in range(1, max(df_supp["k_val"]) + 1):
@@ -247,6 +255,7 @@ df_associations.head()
 
 df_final = df_associations.reset_index().drop(['index', 'support_sing'], axis=1)
 df_final.columns = ["Association", "Support", "Confidence"]
-print("\nFinal Associations that meet the user standards....")
+print("\nStore Name: " + str(ns(int(store_num))))
+print("Final Associations that meet the user standards....")
 print("Support: " + str(support_percent) + "%" + "\t" + "Confidence: " + str(confidence_percent) + '%')
 print(df_final)
