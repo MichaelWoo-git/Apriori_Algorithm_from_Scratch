@@ -1,6 +1,6 @@
 # Apriori_Algorithm
 
-## Tree Format
+## Tree Directory
 ##### data : Has all the csv files for the stores
 ##### Milestones: Has a pdf of the previous milestone documentation
 ##### Screenshots: Contains screenshots/images of outputs from running the py and ipynb file and is used in the README.md file
