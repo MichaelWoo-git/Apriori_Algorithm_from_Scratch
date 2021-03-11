@@ -7,7 +7,7 @@
 ##### src: A source folder of a python script to generate a csv file of random transactions given store and items
 ##### Aprior_Algo.ipynb: The Jupyter Notebook
 ##### Documentation.ipynb: Jupyter Notebook of the creation of the README.md file
-##### Aprior_3.0.py : py script version of the algorithm
+##### Aprior_Algo.py : py script version of the algorithm
 ##### LICENSE: MIT LICENSE
 
 ## Running Aprior_Algo.ipynb (Jupyter Notebook)
