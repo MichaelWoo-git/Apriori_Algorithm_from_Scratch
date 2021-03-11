@@ -258,4 +258,6 @@ df_final.columns = ["Association", "Support", "Confidence"]
 print("\nStore Name: " + str(ns(int(store_num))))
 print("Final Associations that meet the user standards....")
 print("Support: " + str(support_percent) + "%" + "\t" + "Confidence: " + str(confidence_percent) + '%')
+#this will display the max column width so we can see the associations involved....
+pd.set_option('display.max_colwidth', 0)
 print(df_final)
