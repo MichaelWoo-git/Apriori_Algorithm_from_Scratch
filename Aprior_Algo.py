@@ -1,8 +1,15 @@
+#  Imports
+
 import numpy as np
 import pandas as pd
 import os
 import time
 from itertools import permutations, combinations
+from IPython.display import display
+
+# this will display the max column width so we can see the associations involved....
+pd.set_option('display.max_colwidth', None)
+pd.set_option('display.max_columns', None)
 
 #  Prompts to choose which store you want
 
@@ -52,6 +59,7 @@ def ns(store_number):
 
 #  We first have to read in the csv files and make sure that the inputs received from the user are valid
 
+
 def a_priori_read(item_list, transaction, support_percentage, confidence_percentage):
     # Create two different functions one that is solo for read in the file data and the other that is algorithmic with the data
     if support_percentage > 100 or confidence_percentage > 100 or support_percentage < 0 or confidence_percentage < 0:
@@ -60,18 +68,18 @@ def a_priori_read(item_list, transaction, support_percentage, confidence_percent
         time.sleep(2)
         os.system("python Aprior_Algo")
     if support_percentage >= 0 and support_percentage <= 100 and confidence_percentage >= 0 and confidence_percentage <= 100:
-        df2 = pd.read_csv(item_list)
-        df1 = pd.read_csv(transaction)
-        print(df1.head())
-        print(df2.head())
-        trans = np.array(df1["transaction"])
-        items_names = np.array(df2["item_name"])
+        df_item_list = pd.read_csv(item_list)
+        df_transactions = pd.read_csv(transaction)
+        print(df_transactions.head())
+        print(df_item_list.head())
+        trans = np.array(df_transactions["transaction"])
+        items_names = np.array(df_item_list["item_name"])
         k_value = 1
         return items_names, trans, support_percentage, confidence_percentage, k_value
 
 
-#  The first go around the apriori algorithm we find the items that are most frequent K = 1
-#  This is so that we can find the most frequent items in the transactions
+#  The first go around of the Apriori Algorithm we find the items that are most frequent when K=1
+#  This is so that we can find the most frequent items given the transactions
 
 def ap_1(items_names, trans, support_percentage, confidence_percentage, k_value):
     counter = np.zeros(len(items_names), dtype=int)
@@ -88,8 +96,8 @@ def ap_1(items_names, trans, support_percentage, confidence_percentage, k_value)
     counter = list(map(lambda x: int((x / len(trans)) * 100), counter))
     df3 = pd.DataFrame({"item_name": items_names, "support": counter, "k_val": np.full(len(items_names), k_value)})
     rslt_df = df3[df3['support'] >= support_percentage]
-    # print("When K = " + str(k_value))
-    # print(rslt_df)
+    print("When K = " + str(k_value))
+    print(rslt_df)
     items = np.array(rslt_df["item_name"])
     support_count = np.array(rslt_df["support"])
     k_value += 1
@@ -97,6 +105,7 @@ def ap_1(items_names, trans, support_percentage, confidence_percentage, k_value)
 
 
 #  Then we use this function below to find item sets that are most frequent when K > 1
+
 
 def ap_2(item_comb, k_value, trans, support_percentage):
     boo = True
@@ -121,8 +130,8 @@ def ap_2(item_comb, k_value, trans, support_percentage):
 
     # Making sure that user parameters are met for support
     rslt_df = df3[df3['support'] >= support_percentage]
-    # print("When K = " + str(k_value))
-    # print(rslt_df)
+    print("When K = " + str(k_value))
+    print(rslt_df)
     items = np.array(rslt_df["item_name"])
     supp = np.array(rslt_df["support"])
     if len(items) == 0:
@@ -133,6 +142,7 @@ def ap_2(item_comb, k_value, trans, support_percentage):
 
 #  Calls of functions and variable saving
 
+
 frames = []
 items_names, trans, support_percent, confidence_percent, k_value = a_priori_read(
     str(number_to_item_list_of_store(int(store_num))), str(number_to_store(int(store_num))),
@@ -142,27 +152,31 @@ items, supp, k_value, df = ap_1(items_names, trans, support_percent, confidence_
 frames.append(df)
 boo = True
 
-#  Looping through the transactions and increasing K until we can longer support the support value
+#  Increasing K by 1 until we can longer support the support value
+
 
 while boo:
     df_1, boo = ap_2(items, k_value, trans, support_percent)
     frames.append(df_1)
     k_value += 1
 
-#  Here are the results after we find the most frequent sets in the list of transactions
+#  Combine the dataframes we have from when we increase K
 
-print("Results of support that meet user standards of " + str(support_percent))
-print(pd.concat(frames))
+
+print("results of item-sets that meet support are below")
+display(pd.concat(frames))
 df_supp = pd.concat(frames)
-df_supp.head()
+# df_supp.head()
 
-#  Reset the index just to organize it
+
+#  Reset the index just to organize it and the results after we find the most frequent sets in the list of transactions
 
 df_supp = df_supp.reset_index().drop('index', axis=1)
-df_supp.head()
+df_supp
 
 
-#  Generating the Associations (Permutations) and calculating the confidence of the item sets
+#  This is the FUNCTION that genrerates the Associations (Permutations) and calculating the Confidence of the item sets 
+
 
 def confidence(val):
     # first
@@ -218,8 +232,8 @@ def confidence(val):
                     sup_sing.append(ss)
                     perm_item.append(y)
                 except:
-                    # print("itemset below does not exist...")
-                    # print(y)
+                    print("itemset below does not exist...")
+                    print(y)
                     sup_ov.append(ov_sup)
                     sup_sing.append(0)
                     perm_item.append(y)
@@ -229,35 +243,63 @@ def confidence(val):
     return df_main
 
 
-# Iterative calculating the associations and confidence
+# Finding the max k value in the given set
+
+
+try:
+    max(df_supp["k_val"])
+except:
+    print("No max was found...")
+
+# This is where I iteratively call the confidence() function
+
 
 df_frames = []
-for lp in range(1, max(df_supp["k_val"]) + 1):
-    # print(lp)
-    df_0 = confidence(lp)
-    df_0 = df_0[df_0.support_sing != 0]
-    df_frames.append(df_0)
+try:
+    if len(df_supp["k_val"]) != 0:
+        for lp in range(1, max(df_supp["k_val"]) + 1):
+            # print(lp)
+            #
+            df_0 = confidence(lp)
+            df_0 = df_0[df_0.support_sing != 0]
+            df_frames.append(df_0)
+        df_associations = pd.concat(df_frames)
+        print(df_associations.head())
+except:
+    print("No items or transactions meet the user requirements!")
 
-df_associations = pd.concat(df_frames)
-df_associations.head()
-
-# # Concat the dataframes
-
-df_associations = pd.concat(df_frames)
-df_associations.head()
+#  Concat the Dataframes
+try:
+    df_associations = pd.concat(df_frames)
+    print(df_associations)
+except:
+    print("No items or transactions meet the user requirements!")
 
 #  Making sure that user parameters are met for confidence
 
-df_associations = df_associations[df_associations['confidence'] >= confidence_percent]
-df_associations.head()
 
-#  Formatting the dataframe final
+try:
+    df_associations = df_associations[df_associations['confidence'] >= confidence_percent]
+    print(df_associations)
+except:
+    print("No items or transactions meet the user requirements!")
 
-df_final = df_associations.reset_index().drop(['index', 'support_sing'], axis=1)
-df_final.columns = ["Association", "Support", "Confidence"]
-print("\nStore Name: " + str(ns(int(store_num))))
-print("Final Associations that meet the user standards....")
-print("Support: " + str(support_percent) + "%" + "\t" + "Confidence: " + str(confidence_percent) + '%')
-#this will display the max column width so we can see the associations involved....
-pd.set_option('display.max_colwidth', 0)
-print(df_final)
+#  Formatting the Dataframe Final
+
+
+try:
+    df_final = df_associations.reset_index().drop(['index', 'support_sing'], axis=1)
+    df_final.columns = ["Association", "Support", "Confidence"]
+except:
+    print("No items or transactions meet the user requirements!")
+
+# Final Associations
+
+
+try:
+    print("Store Name: " + str(ns(int(store_num))))
+    print("\nFinal Associations that meet the user standards....")
+    print("Support: " + str(support_percent) + "%" + "\t" + "Confidence: " + str(confidence_percent) + '%')
+    print(df_final)
+except:
+    print("\nNo Associations were generated based on the parameters set!")
