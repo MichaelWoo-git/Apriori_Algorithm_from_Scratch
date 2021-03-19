@@ -5,9 +5,9 @@
 ##### Milestones: Has a pdf of the previous milestone documentation
 ##### Screenshots: Contains screenshots/images of outputs from running the py and ipynb file and is used in the README.md file
 ##### src: A source folder of a python script to generate a csv file of random transactions given store and items
-##### Aprior_Algo.ipynb: The Jupyter Notebook
+##### Apriori_Algo.ipynb: The Jupyter Notebook
 ##### Documentation.ipynb: Jupyter Notebook of the creation of the README.md file
-##### Aprior_Algo.py : py script version of the algorithm
+##### Apriori_Algo.py : py script version of the algorithm
 ##### LICENSE: MIT LICENSE
 ##### Implementation
 * After learning the subject of the Aprior Algorithm in Data Mining, it was in my best interest to use the concept of sets, counters, dataframes, and lambdas, loops, and well defined functions to carry out specific tasks to acheive the Aprior Algorithm. 
