@@ -52,4 +52,4 @@
 ##### Screenshot 4
 ![term-1](Screenshots/terminal_4.JPG)
 
-# Enjoy the Aprior Algorithm 2.0
+# Enjoy the Apriori Algorithm 2.0
