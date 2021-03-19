@@ -9,7 +9,8 @@
 ##### Documentation.ipynb: Jupyter Notebook of the creation of the README.md file
 ##### Aprior_Algo.py : py script version of the algorithm
 ##### LICENSE: MIT LICENSE
-
+##### Implementation
+* After learning the subject of the Aprior Algorithm in Data Mining, it was in my best interest to use the concept of sets, counters, dataframes, and lambdas, loops, and well defined functions to carry out specific tasks to acheive the Aprior Algorithm. 
 ## Running Aprior_Algo.ipynb (Jupyter Notebook)
 
 ##### Make sure to run the ENTIRE workbook
