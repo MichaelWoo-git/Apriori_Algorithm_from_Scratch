@@ -106,7 +106,6 @@ def ap_1(items_names, trans, support_percentage, confidence_percentage, k_value)
 
 #  Then we use this function below to find item sets that are most frequent when K > 1
 
-
 def ap_2(item_comb, k_value, trans, support_percentage):
     boo = True
     comb = combinations(item_comb, k_value)
@@ -175,7 +174,7 @@ df_supp = df_supp.reset_index().drop('index', axis=1)
 df_supp
 
 
-#  This is the FUNCTION that genrerates the Associations (Permutations) and calculating the Confidence of the item sets 
+#  This is the FUNCTION that generates the Associations (Permutations) and calculating the Confidence of the item sets
 
 
 def confidence(val):
