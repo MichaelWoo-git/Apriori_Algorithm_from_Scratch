@@ -178,15 +178,17 @@ df_supp
 
 
 def confidence(val):
-    # first
-    df_212 = df_supp.loc[df_supp['k_val'] == val]
-    stuff_name = np.array(df_212["item_name"])
-    support_arr = np.array(df_212['support'])
+    # Since we already have our support for our items what we need to worry about is the confidence levels
 
-    # second
-    df_temp = df_supp.loc[df_supp['k_val'] == val + 1]
-    df_21231 = np.array(df_temp["item_name"])
-    sup_arr = np.array(df_temp['support'])
+    # item_set before the arrow
+    df_before = df_supp.loc[df_supp['k_val'] == val]
+    stuff_name_before = np.array(df_before["item_name"])
+    support_arr_before = np.array(df_before['support'])
+
+    # item_set of the overall set
+    df_overall = df_supp.loc[df_supp['k_val'] == val + 1]
+    df_ov = np.array(df_overall["item_name"])
+    suppport_ov = np.array(df_overall['support'])
 
     # variables to save
     sup_ov = list()
@@ -195,47 +197,49 @@ def confidence(val):
 
     # When the item set is k =1 and the comparison is k = 2
     if val == 1:
-        for w in df_21231:
-            temp_list = list(df_21231)
-            ov_sup = sup_arr[temp_list.index(w)]
+        for i_set in df_ov:
+            temp_list = list(df_ov)
+            # I want to select the support of that overall set
+            ov_sup = suppport_ov[temp_list.index(i_set)]
             temp = set()
-            for d in w:
-                temp.add(d)
+            # This is where we generate our permutations
+            for indiv_item in i_set:
+                temp.add(indiv_item)
             perm = permutations(temp)
             perm_lst = list(perm)
-            for y in perm_lst:
-                perm_item.append(y)
+            # for each permutation in the perm_list
+            for perm_item_set in perm_lst:
+                perm_item.append(perm_item_set)
                 sup_ov.append(ov_sup)
-                sup_sing.append(int(support_arr[np.where(stuff_name == y[0])]))
+                sup_sing.append(int(support_arr_before[np.where(stuff_name_before == perm_item_set[0])]))
 
     # When the item set is k > 1 and the comparison is k += k + 1
     if val > 1:
-        for w in df_21231:
-            temp_list = list(df_21231)
-            ov_sup = sup_arr[temp_list.index(w)]
+        for i_set in df_ov:
+            temp_list = list(df_ov)
+            ov_sup = suppport_ov[temp_list.index(i_set)]
             temp = set()
-            for d in w:
-                temp.add(d)
+            for indiv_item in i_set:
+                temp.add(indiv_item)
             perm = permutations(temp)
             perm_lst = list(perm)
-            for y in perm_lst:
+            for perm_item_set in perm_lst:
                 try:
                     temp_set = []
-                    for t in range(0, val):
-                        temp_set.append(y[t])
-                    # lol = tuple(sorted(temp_set))
-                    lol = tuple(temp_set)
-                    tp_lst = list(stuff_name)
-                    ss = support_arr[tp_lst.index(lol)]
+                    for dex in range(0, val):
+                        temp_set.append(perm_item_set[dex])
+                    item_set_before = tuple(temp_set)
+                    tp_lst = list(stuff_name_before)
+                    ss = support_arr_before[tp_lst.index(item_set_before)]
                     sup_ov.append(ov_sup)
                     sup_sing.append(ss)
-                    perm_item.append(y)
+                    perm_item.append(perm_item_set)
                 except:
-                    print("itemset below does not exist...")
-                    print(y)
+                    #                     print("itemset below does not exist...")
+                    #                     print(y)
                     sup_ov.append(ov_sup)
                     sup_sing.append(0)
-                    perm_item.append(y)
+                    perm_item.append(perm_item_set)
 
     df_main = pd.DataFrame({"association": perm_item, "support_ov": sup_ov, "support_sing": sup_sing})
     df_main = df_main.assign(confidence=lambda x: round(((x.support_ov / x.support_sing) * 100), 0))
