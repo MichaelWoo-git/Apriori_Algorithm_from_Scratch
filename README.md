@@ -10,7 +10,7 @@
 ##### Aprior_Algo.py : py script version of the algorithm
 ##### LICENSE: MIT LICENSE
 #### Implementation
-* Using the concept of sets, counters, dataframes, and lambdas, loops, and well defined functions to carry out specific tasks that captures the implemention of the Apriori Algorithm from scratch. 
+* Using the concept of sets, counters, dataframes, and lambdas, loops, and well defined functions to carry out specific tasks that captures the implemention of the Apriori Algorithm from scratch. The dataset that was used was comprised of 2 csv files (item_names & transactions) per store.
 
 ## Running Aprior_Algo.ipynb (Jupyter Notebook)
 
