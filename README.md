@@ -32,5 +32,3 @@
 
 ### Screenshot 2
 ![example-1](Screenshots/example_3_.JPG)
-
-# Enjoy the Aprior Algorithm 2.0
